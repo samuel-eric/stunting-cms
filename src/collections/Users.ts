@@ -6,8 +6,25 @@ export const Users: CollectionConfig = {
     useAsTitle: 'email',
   },
   auth: true,
+  access: {
+    admin: ({ req: { user } }) => {
+      return user?.email === 'admin@mail.com'
+    },
+  },
   fields: [
     // Email added by default
     // Add more fields as needed
+    {
+      name: 'username',
+      type: 'text',
+      unique: true,
+      required: true,
+    },
+    {
+      name: 'bookmarks',
+      type: 'relationship',
+      relationTo: 'articles',
+      hasMany: true,
+    },
   ],
 }
