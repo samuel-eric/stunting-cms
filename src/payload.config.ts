@@ -10,6 +10,8 @@ import { s3Storage } from '@payloadcms/storage-s3'
 
 import { Users } from './collections/Users'
 import { Articles } from './collections/Articles'
+import { Forums } from './collections/Forums'
+import { Comments } from './collections/Comments'
 import { Media } from './collections/Media'
 
 const filename = fileURLToPath(import.meta.url)
@@ -22,7 +24,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Articles],
+  collections: [Users, Media, Articles, Forums, Comments],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
