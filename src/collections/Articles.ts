@@ -1,4 +1,6 @@
 import type { CollectionConfig } from 'payload'
+import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
+import { convertLexicalToHTML } from '@payloadcms/richtext-lexical/html'
 
 export const Articles: CollectionConfig = {
   slug: 'articles',
@@ -34,6 +36,15 @@ export const Articles: CollectionConfig = {
       name: 'body',
       type: 'richText',
       required: true,
+      hooks: {
+        afterRead: [
+          async ({ value }) => {
+            const data: SerializedEditorState = value
+            const html = convertLexicalToHTML({ data })
+            return html
+          },
+        ],
+      },
     },
   ],
 }
