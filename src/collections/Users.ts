@@ -21,10 +21,21 @@ export const Users: CollectionConfig = {
       required: true,
     },
     {
+      name: 'profile',
+      type: 'upload',
+      relationTo: 'media',
+    },
+    {
       name: 'bookmarks',
       type: 'relationship',
       relationTo: 'articles',
       hasMany: true,
+    },
+    {
+      name: 'forums',
+      type: 'join',
+      collection: 'forums',
+      on: 'writer',
     },
   ],
 }

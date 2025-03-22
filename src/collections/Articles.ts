@@ -15,6 +15,11 @@ export const Articles: CollectionConfig = {
       required: true,
     },
     {
+      name: 'category',
+      type: 'relationship',
+      relationTo: 'categories',
+    },
+    {
       name: 'image',
       type: 'upload',
       relationTo: 'media',
