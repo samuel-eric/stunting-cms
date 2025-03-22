@@ -179,6 +179,7 @@ export interface Media {
 export interface Article {
   id: number;
   title: string;
+  subtitle: string;
   category?: (number | null) | Category;
   image: number | Media;
   body: {
@@ -369,6 +370,7 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface ArticlesSelect<T extends boolean = true> {
   title?: T;
+  subtitle?: T;
   category?: T;
   image?: T;
   body?: T;

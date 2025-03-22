@@ -15,6 +15,11 @@ export const Articles: CollectionConfig = {
       required: true,
     },
     {
+      name: 'subtitle',
+      type: 'text',
+      required: true,
+    },
+    {
       name: 'category',
       type: 'relationship',
       relationTo: 'categories',
