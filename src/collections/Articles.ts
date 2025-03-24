@@ -15,6 +15,7 @@ export const Articles: CollectionConfig = {
       name: 'title',
       type: 'text',
       required: true,
+      index: true,
     },
     {
       name: 'subtitle',
@@ -25,6 +26,13 @@ export const Articles: CollectionConfig = {
       name: 'category',
       type: 'relationship',
       relationTo: 'categories',
+    },
+    {
+      name: 'isRecommended',
+      type: 'checkbox',
+      label: 'Is the article recommended?',
+      defaultValue: false,
+      index: true,
     },
     {
       name: 'image',
@@ -39,7 +47,7 @@ export const Articles: CollectionConfig = {
       hooks: {
         afterRead: [
           async ({ req, value }) => {
-            if (req.payloadAPI === 'REST') {
+            if (req.payloadAPI === 'REST' && req.headers.get('x-app-request') == 'true') {
               const data: SerializedEditorState = value
               const html = convertLexicalToHTML({ data })
               return html

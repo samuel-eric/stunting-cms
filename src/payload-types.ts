@@ -182,6 +182,7 @@ export interface Article {
   title: string;
   subtitle: string;
   category?: (number | null) | Category;
+  isRecommended?: boolean | null;
   image: number | Media;
   body: {
     root: {
@@ -373,6 +374,7 @@ export interface ArticlesSelect<T extends boolean = true> {
   title?: T;
   subtitle?: T;
   category?: T;
+  isRecommended?: T;
   image?: T;
   body?: T;
   updatedAt?: T;
