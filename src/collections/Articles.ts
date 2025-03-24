@@ -38,10 +38,12 @@ export const Articles: CollectionConfig = {
       required: true,
       hooks: {
         afterRead: [
-          async ({ value }) => {
-            const data: SerializedEditorState = value
-            const html = convertLexicalToHTML({ data })
-            return html
+          async ({ req, value }) => {
+            if (req.payloadAPI === 'REST') {
+              const data: SerializedEditorState = value
+              const html = convertLexicalToHTML({ data })
+              return html
+            }
           },
         ],
       },
