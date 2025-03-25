@@ -5,7 +5,10 @@ export const Users: CollectionConfig = {
   admin: {
     useAsTitle: 'email',
   },
-  auth: true,
+  auth: {
+    verify: false,
+    maxLoginAttempts: 0,
+  },
   access: {
     admin: ({ req: { user } }) => {
       return user?.email === 'admin@mail.com'
