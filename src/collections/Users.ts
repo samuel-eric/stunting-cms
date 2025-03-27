@@ -13,6 +13,8 @@ export const Users: CollectionConfig = {
     admin: ({ req: { user } }) => {
       return user?.email === 'admin@mail.com'
     },
+    create: () => true,
+    update: ({ req: { user }, id }) => (user ? user.id === id : false),
   },
   fields: [
     // Email added by default
