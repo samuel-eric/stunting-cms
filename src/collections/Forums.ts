@@ -19,7 +19,7 @@ export const Forums: CollectionConfig = {
     },
     {
       name: 'body',
-      type: 'richText',
+      type: 'textarea',
       required: true,
     },
     {
