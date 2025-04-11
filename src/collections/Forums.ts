@@ -5,6 +5,20 @@ export const Forums: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
   },
+  access: {
+    delete: async ({ req: { user, payload }, id }) => {
+      if (user !== null) {
+        const forum = await payload.findByID({
+          collection: 'forums',
+          id: id!,
+          depth: 0,
+        })
+        return forum.writer === user.id
+      } else {
+        return false
+      }
+    },
+  },
   fields: [
     {
       name: 'writer',
