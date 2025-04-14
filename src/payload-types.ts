@@ -134,6 +134,7 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  role?: ('admin' | 'user') | null;
   username: string;
   profile?: (number | null) | Media;
   bookmarks?: (number | Article)[] | null;
@@ -317,6 +318,7 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  role?: T;
   username?: T;
   profile?: T;
   bookmarks?: T;

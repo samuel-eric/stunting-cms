@@ -11,7 +11,10 @@ export const Users: CollectionConfig = {
   },
   access: {
     admin: ({ req: { user } }) => {
-      return user?.email === 'admin@mail.com'
+      if (user && user.role === 'admin') {
+        return true
+      }
+      return false
     },
     create: () => true,
     update: ({ req: { user }, id }) => (user ? user.id === id : false),
@@ -19,6 +22,16 @@ export const Users: CollectionConfig = {
   fields: [
     // Email added by default
     // Add more fields as needed
+    {
+      name: 'role',
+      type: 'select',
+      options: ['admin', 'user'],
+      defaultValue: 'user',
+      admin: {
+        isClearable: false,
+        isSortable: false,
+      },
+    },
     {
       name: 'username',
       type: 'text',
