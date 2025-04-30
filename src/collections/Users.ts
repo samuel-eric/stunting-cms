@@ -56,4 +56,24 @@ export const Users: CollectionConfig = {
       on: 'writer',
     },
   ],
+  endpoints: [
+    {
+      path: '/:id/password-token',
+      method: 'get',
+      handler: async (req) => {
+        const userId = req.routeParams?.id
+        if (!req.user || req.user.id !== Number(userId)) {
+          return Response.json({ error: 'forbidden' }, { status: 403 })
+        }
+        const token = await req.payload.forgotPassword({
+          collection: 'users',
+          data: {
+            email: req.user.email,
+          },
+          disableEmail: true,
+        })
+        return Response.json({ token })
+      },
+    },
+  ],
 }
