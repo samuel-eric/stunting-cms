@@ -1,17 +1,14 @@
 FROM node:23-slim AS base
-# Install dependencies only when needed
+
 FROM base AS deps
 WORKDIR /app
-
-# Install latest corepack to fix signature issues
-RUN npm install -g corepack@latest && corepack enable
 
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
 COPY . .
 RUN \
   if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
+  elif [ -f package-lock.json ]; then npm install; \
   elif [ -f pnpm-lock.yaml ]; then pnpm i --frozen-lockfile; \
   else echo "Lockfile not found." && exit 1; \
   fi
@@ -28,6 +25,8 @@ RUN npm install -g pnpm --unsafe-perm
 # Run database migrations
 RUN pnpm payload migrate:status || echo "No pending migrations found."
 RUN pnpm payload migrate || echo "No migrations to apply."
+
+RUN npm run postinstall || echo "sharp rebuild skipped"
 
 # Build the application
 RUN \

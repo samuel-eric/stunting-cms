@@ -13,7 +13,8 @@
     "lint": "cross-env NODE_OPTIONS=--no-deprecation next lint",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
-    "ci": "payload migrate && npm run build"
+    "ci": "payload migrate && npm run build",
+    "postinstall": "npx sharp --force"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.36.0",
