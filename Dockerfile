@@ -26,8 +26,6 @@ RUN npm install -g pnpm --unsafe-perm
 RUN pnpm payload migrate:status || echo "No pending migrations found."
 RUN pnpm payload migrate || echo "No migrations to apply."
 
-RUN npm run postinstall || echo "sharp rebuild skipped"
-
 # Build the application
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
