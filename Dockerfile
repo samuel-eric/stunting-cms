@@ -1,7 +1,6 @@
-FROM node:23-alpine AS base
+FROM node:23-slim AS base
 # Install dependencies only when needed
 FROM base AS deps
-RUN apk add --no-cache libc6-compat
 WORKDIR /app
 # Install latest corepack to fix signature issues
 RUN npm install -g corepack@latest && corepack enable
@@ -24,8 +23,6 @@ RUN npm install -g pnpm --unsafe-perm
 # Run database migrations
 RUN pnpm payload migrate:status || echo "No pending migrations found."
 RUN pnpm payload migrate || echo "No migrations to apply."
-# install sharp
-RUN npm install --os=linux --libc=musl --cpu=x64 sharp
 # Build the application
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
