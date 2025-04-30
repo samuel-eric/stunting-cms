@@ -7,6 +7,7 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 import { s3Storage } from '@payloadcms/storage-s3'
+import { gcsStorage } from '@payloadcms/storage-gcs'
 
 import { Users } from './collections/Users'
 import { Articles } from './collections/Articles'
@@ -39,21 +40,30 @@ export default buildConfig({
   sharp,
   plugins: [
     payloadCloudPlugin(),
-    s3Storage({
+    // s3Storage({
+    //   collections: {
+    //     media: {
+    //       prefix: 'media',
+    //     },
+    //   },
+    //   bucket: process.env.S3_BUCKET || '',
+    //   config: {
+    //     forcePathStyle: true,
+    //     credentials: {
+    //       accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+    //       secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+    //     },
+    //     region: process.env.S3_REGION,
+    //     endpoint: process.env.S3_ENDPOINT,
+    //   },
+    // }),
+    gcsStorage({
       collections: {
-        media: {
-          prefix: 'media',
-        },
+        media: true,
       },
-      bucket: process.env.S3_BUCKET || '',
-      config: {
-        forcePathStyle: true,
-        credentials: {
-          accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
-          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
-        },
-        region: process.env.S3_REGION,
-        endpoint: process.env.S3_ENDPOINT,
+      bucket: process.env.GCS_BUCKET || '',
+      options: {
+        projectId: process.env.GCS_PROJECT_ID,
       },
     }),
   ],
