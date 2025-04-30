@@ -10,7 +10,7 @@ COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
 COPY . .
 RUN \
   if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci && npm install --include=optional sharp; \
+  elif [ -f package-lock.json ]; then npm ci; \
   elif [ -f pnpm-lock.yaml ]; then pnpm i --frozen-lockfile; \
   else echo "Lockfile not found." && exit 1; \
   fi
@@ -24,6 +24,8 @@ RUN npm install -g pnpm --unsafe-perm
 # Run database migrations
 RUN pnpm payload migrate:status || echo "No pending migrations found."
 RUN pnpm payload migrate || echo "No migrations to apply."
+# install sharp
+RUN npm install --os=linux --libc=musl --cpu=x64 sharp
 # Build the application
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
