@@ -50,6 +50,12 @@ export const Users: CollectionConfig = {
       hasMany: true,
     },
     {
+      name: 'history',
+      type: 'relationship',
+      relationTo: 'articles',
+      hasMany: true,
+    },
+    {
       name: 'forums',
       type: 'join',
       collection: 'forums',
