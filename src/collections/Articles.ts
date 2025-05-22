@@ -15,12 +15,6 @@ export const Articles: CollectionConfig = {
       return false
     },
     read: () => true,
-    update: ({ req: { user } }) => {
-      if (user && user.role === 'admin') {
-        return true
-      }
-      return false
-    },
     delete: ({ req: { user } }) => {
       if (user && user.role === 'admin') {
         return true
@@ -34,16 +28,40 @@ export const Articles: CollectionConfig = {
       type: 'text',
       required: true,
       index: true,
+      access: {
+        update: ({ req: { user } }) => {
+          if (user && user.role === 'admin') {
+            return true
+          }
+          return false
+        },
+      },
     },
     {
       name: 'subtitle',
       type: 'text',
       required: true,
+      access: {
+        update: ({ req: { user } }) => {
+          if (user && user.role === 'admin') {
+            return true
+          }
+          return false
+        },
+      },
     },
     {
       name: 'category',
       type: 'relationship',
       relationTo: 'categories',
+      access: {
+        update: ({ req: { user } }) => {
+          if (user && user.role === 'admin') {
+            return true
+          }
+          return false
+        },
+      },
     },
     {
       name: 'readBy',
@@ -57,12 +75,28 @@ export const Articles: CollectionConfig = {
       label: 'Is the article recommended?',
       defaultValue: false,
       index: true,
+      access: {
+        update: ({ req: { user } }) => {
+          if (user && user.role === 'admin') {
+            return true
+          }
+          return false
+        },
+      },
     },
     {
       name: 'image',
       type: 'upload',
       relationTo: 'media',
       required: true,
+      access: {
+        update: ({ req: { user } }) => {
+          if (user && user.role === 'admin') {
+            return true
+          }
+          return false
+        },
+      },
     },
     {
       name: 'body',
@@ -78,6 +112,14 @@ export const Articles: CollectionConfig = {
             }
           },
         ],
+      },
+      access: {
+        update: ({ req: { user } }) => {
+          if (user && user.role === 'admin') {
+            return true
+          }
+          return false
+        },
       },
     },
   ],
