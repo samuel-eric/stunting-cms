@@ -46,6 +46,12 @@ export const Articles: CollectionConfig = {
       relationTo: 'categories',
     },
     {
+      name: 'readBy',
+      type: 'relationship',
+      relationTo: 'users',
+      hasMany: true,
+    },
+    {
       name: 'isRecommended',
       type: 'checkbox',
       label: 'Is the article recommended?',

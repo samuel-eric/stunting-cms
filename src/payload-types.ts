@@ -138,7 +138,6 @@ export interface User {
   username: string;
   profile?: (number | null) | Media;
   bookmarks?: (number | Article)[] | null;
-  history?: (number | Article)[] | null;
   forums?: {
     docs?: (number | Forum)[];
     hasNextPage?: boolean;
@@ -181,6 +180,7 @@ export interface Article {
   title: string;
   subtitle: string;
   category?: (number | null) | Category;
+  readBy?: (number | User)[] | null;
   isRecommended?: boolean | null;
   image: number | Media;
   body: {
@@ -322,7 +322,6 @@ export interface UsersSelect<T extends boolean = true> {
   username?: T;
   profile?: T;
   bookmarks?: T;
-  history?: T;
   forums?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -358,6 +357,7 @@ export interface ArticlesSelect<T extends boolean = true> {
   title?: T;
   subtitle?: T;
   category?: T;
+  readBy?: T;
   isRecommended?: T;
   image?: T;
   body?: T;
