@@ -1,0 +1,27 @@
+# Use an official Node.js runtime as a parent image
+FROM node:18-alpine
+
+# Install the dependencies that 'sharp' needs to compile.
+# vips-dev is the image processing library sharp is built on.
+# build-base contains tools like make, g++, etc.
+# python3 is also required by node-gyp (the build tool).
+RUN apk add --no-cache build-base python3 vips-dev
+
+# Set the working directory in the container
+WORKDIR /home/node/app
+
+# Copy package.json and package-lock.json first to leverage Docker's layer caching.
+COPY package.json ./
+COPY package-lock.json ./
+
+# Install app dependencies. Now 'sharp' will have the tools it needs.
+RUN npm install
+
+# Bundle the rest of your app's source code
+COPY . .
+
+# Your app binds to port 3000, so you need to expose it
+EXPOSE 3000
+
+# This command now runs migrations non-interactively by passing the '--yes' flag.
+CMD ["sh", "-c", "yes | npm run payload migrate && npm run dev"]
