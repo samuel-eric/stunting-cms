@@ -182,7 +182,7 @@ export interface Article {
   category?: (number | null) | Category;
   readBy?: (number | User)[] | null;
   isRecommended?: boolean | null;
-  image: number | Media;
+  image?: (number | null) | Media;
   body: {
     root: {
       type: string;

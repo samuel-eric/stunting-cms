@@ -88,7 +88,6 @@ export const Articles: CollectionConfig = {
       name: 'image',
       type: 'upload',
       relationTo: 'media',
-      required: true,
       access: {
         update: ({ req: { user } }) => {
           if (user && user.role === 'admin') {
