@@ -1,60 +1,60 @@
+# Use the official Node.js 23 slim image as a base
 FROM node:23-slim AS base
 
+# -----------------------------------------------------------------
+
+# Stage 1: Install dependencies
 FROM base AS deps
 WORKDIR /app
 
-# Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
-COPY . .
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm install; \
-  elif [ -f pnpm-lock.yaml ]; then pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
+# Copy package.json and package-lock.json to leverage Docker cache
+COPY package.json package-lock.json* ./
 
-# Rebuild the source code only when needed
+# Install project dependencies using npm
+RUN npm install
+
+# -----------------------------------------------------------------
+
+# Stage 2: Build the application
 FROM base AS builder
 WORKDIR /app
+
+# Copy dependencies from the 'deps' stage
 COPY --from=deps /app/node_modules ./node_modules
+# Copy the rest of the application source code
 COPY . .
 
-# Install pnpm globally for Payload operations
-RUN npm install -g pnpm --unsafe-perm
-
-# Run database migrations
-RUN pnpm payload migrate:status || echo "No pending migrations found."
-RUN pnpm payload migrate || echo "No migrations to apply."
-
 # Build the application
-RUN \
-  if [ -f yarn.lock ]; then yarn run build; \
-  elif [ -f package-lock.json ]; then npm run build; \
-  elif [ -f pnpm-lock.yaml ]; then pnpm generate:importmap && pnpm run build; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
+RUN npm run build
 
-# Run postbuild script
-RUN pnpm run postbuild || echo "Postbuild script failed."
+# -----------------------------------------------------------------
 
-# Production image, copy all the files and run next
+# Stage 3: Production image
 FROM base AS runner
 WORKDIR /app
+
+# Set the environment to production
 ENV NODE_ENV=production
+# Disable Next.js telemetry
 ENV NEXT_TELEMETRY_DISABLED=1
+
+# Create a non-root user and group for better security
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
-
-# Automatically leverage output traces to reduce image size
+# Copy the standalone output from the builder stage
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+# Copy the static assets from the builder stage
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+# Set the user to the non-root user
 USER nextjs
+
+# Expose the port the app runs on
 EXPOSE 3000
+
+# Set the port environment variable
 ENV PORT=3000
 
-# server.js is created by next build from the standalone output
+# The command to run the application
 CMD ["node", "server.js"]

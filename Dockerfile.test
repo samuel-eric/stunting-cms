@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as a parent image
-FROM node:18-alpine
+FROM node:23-alpine
 
 # Install the dependencies that 'sharp' needs to compile.
 # vips-dev is the image processing library sharp is built on.

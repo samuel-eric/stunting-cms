@@ -1,0 +1,30 @@
+name: 'Run Production Database Migration'
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  migrate-database:
+    name: Database migration
+    runs-on: ubuntu-latest
+
+    env:
+      DATABASE_URI: ${{ secrets.DATABASE_URI }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '23'
+          cache: 'npm'
+
+      - name: 'Install dependencies'
+        run: npm install
+
+      - name: 'Run Payload Migration'
+        run: npm run payload migrate
