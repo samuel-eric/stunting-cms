@@ -1,8 +1,17 @@
-# _Backend_ untuk Aplikasi KMS Stunting
+# _Backend_ Aplikasi KMS Stunting
 
-_Backend_ dibangun menggunakan Payload, dengan basis data Postgres yang disediakan Supabase dan telah di-_deploy_ di Google Cloud.
+_Backend_ untuk aplikasi KMS _stunting_ II4092 Tugas Akhir
 
 Link _deploy_: https://stunting-cms-498222137345.asia-southeast2.run.app/admin
+
+## Technology
+
+_Backend_ ini dibangun dengan teknologi:
+1. Payload CMS
+2. Supabase untuk basis data
+3. Google Cloud Storage untuk tempat penyimpanan _file_
+4. Google Cloud Run untuk tempat _deploy_
+5. Docker untuk _deployment_ dan _testing_
 
 ## _Integration Testing_
 
