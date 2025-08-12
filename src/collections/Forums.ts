@@ -1,9 +1,45 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, CollectionBeforeDeleteHook } from 'payload'
+
+// Define the beforeDelete hook
+const deleteComments: CollectionBeforeDeleteHook = async ({ req, id }) => {
+  const { payload } = req
+
+  try {
+    const commentsToDelete = await payload.find({
+      collection: 'comments',
+      where: {
+        forum: {
+          equals: id,
+        },
+      },
+      depth: 0,
+      pagination: false,
+    })
+
+    const commentIds = commentsToDelete.docs.map((comment) => comment.id)
+
+    if (commentIds.length > 0) {
+      await payload.delete({
+        collection: 'comments',
+        where: {
+          id: {
+            in: commentIds,
+          },
+        },
+      })
+    }
+  } catch (error) {
+    console.error('Error deleting associated comments:', error)
+  }
+}
 
 export const Forums: CollectionConfig = {
   slug: 'forums',
   admin: {
     useAsTitle: 'title',
+  },
+  hooks: {
+    beforeDelete: [deleteComments],
   },
   access: {
     delete: async ({ req: { user, payload }, id }) => {
