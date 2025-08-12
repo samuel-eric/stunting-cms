@@ -22,6 +22,22 @@ export const Forums: CollectionConfig = {
         return false
       }
     },
+    update: async ({ req: { user, payload }, id }) => {
+      if (user !== null) {
+        try {
+          const forum = await payload.findByID({
+            collection: 'forums',
+            id: id!,
+            depth: 0,
+          })
+          return forum.writer === user.id
+        } catch (_error) {
+          return false
+        }
+      } else {
+        return false
+      }
+    },
   },
   fields: [
     {
